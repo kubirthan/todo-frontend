@@ -91,7 +91,7 @@ export default function Todo() {
             }, 3000);
 
             setEditId(-1)
-            
+
           } else {
             //set error
             setError("Unable to create todo item");
@@ -104,6 +104,18 @@ export default function Todo() {
 
   const handleEditCancel = () => {
     setEditId(-1)
+  }
+
+  const handledeleted = (id) => {
+    if(window.confirm('Are you sure want to delete?')){
+        fetch(apiurl+'/todos'+id, {
+            method:"DELETE"
+        })
+        .then(() => {
+            const updateedTodos = todos.filter((item) => item._id !== id)
+            setTodos(updateedTodos)
+        })
+    }
   }
 
   return (
@@ -171,7 +183,7 @@ export default function Todo() {
             <div className="d-flex gap-2">
                 {editId == -1 || editId !== item._id  ?  <button className="btn btn-warning" onClick={(item) => handleEdit(item)}>Edit</button>
                 : <button type="button" onClick={handleupdate}>Update</button>}
-              {editId == -1 ? <button className="btn btn-danger">Delete</button> : 
+              {editId == -1 ? <button className="btn btn-danger" onClick={() => handledeleted(item._id)}>Delete</button> : 
               <button className="btn btn-danger" onClick={handleEditCancel}>Cancel</button>
               }
               
